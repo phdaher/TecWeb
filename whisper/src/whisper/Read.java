@@ -16,22 +16,26 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/read")
 public class Read extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Read() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public Read() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		String orderby = request.getParameter("orderby");
+		if (!"author".equals(orderby)) {
+			orderby = "id";
+		}
 		DAO dao = new DAO();
-		List<Whisper> whispers = dao.getWhispers();
+		List<Whisper> whispers = dao.getWhispers(orderby);
 		PrintWriter out = response.getWriter();
 		out.println("<html><body>");
 		out.println("<form action='/whisper/create' method='post'>");
@@ -42,6 +46,13 @@ public class Read extends HttpServlet {
 		out.println("<td> <input type='text' name='tag'/> </td>");
 		out.println("<td><input type='submit' value='Add'></td></tr>");
 		out.println("</table></form><br/>");
+		
+		if (orderby == "id") {
+			out.println("<a href='/whisper/read?orderby=author'>Order by Author</a>");
+		} else {
+			out.println("<a href='/whisper/read'>Order by Id</a>");
+		}
+		out.println("<br/><br/>");
 		out.println("<table border='1'><tr><td>ID</td><td>Author</td>" +
 		 "<td>Date</td><td>Content</td><td>Tag</td><td>Edit</td><td>Delete</td></tr>");
 		for (Whisper whisper : whispers ) {

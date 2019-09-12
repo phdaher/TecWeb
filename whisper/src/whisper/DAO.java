@@ -29,11 +29,11 @@ public class DAO {
 	}
 	
 	@SuppressWarnings("null")
-	public List<Whisper> getWhispers() {
+	public List<Whisper> getWhispers(String orderby) {
 		List<Whisper> whispers = new ArrayList<Whisper>();
 		PreparedStatement stmt = null;
 		try {
-			stmt = connection.prepareStatement("SELECT * FROM whisper");
+			stmt = connection.prepareStatement("SELECT * FROM whisper ORDER BY " + orderby);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
